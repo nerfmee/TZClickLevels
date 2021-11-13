@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 public class GameBoard : MonoBehaviour
 {
     [SerializeField] private ClickableItem clickableItem;
+    [SerializeField] private DoubleTap _doubleTap;
+    
     private Vector2 _width;
     private Vector2 _height;
     private Vector2 _itemSize;
@@ -13,10 +15,13 @@ public class GameBoard : MonoBehaviour
     private float _clickCountsToWin = 20;
     private int _bonusSpawnChance = 50;
 
-    [SerializeField] private DoubleTap _doubleTap;
-
-    public static Action<float> OnUpdateProgressBar;
+    public static Action<float> OnStartLevel;
+    public static Action<float, float, float> OnUpdateProgressBar;
     public static Action OnWin;
+    
+    
+    private float _progressBarCounter = 0;
+    public int ProgressStep { get; set; } = 1;
     private void Awake()
     {
         Camera cameraMain = Camera.main;
@@ -31,8 +36,11 @@ public class GameBoard : MonoBehaviour
         _itemSize = clickableItem.ItemSpriteRenderer.size;
     }
 
-    private float _progressBarCounter = 0;
-    public int ProgressStep { get; set; } = 1;
+    private void StartLevel()
+    {
+        OnStartLevel?.Invoke(_clickCountsToWin);
+        clickableItem.gameObject.SetActive(true);
+    }
 
     public void ProgressApply()
     {
@@ -45,7 +53,7 @@ public class GameBoard : MonoBehaviour
     {
         _progressBarCounter += ProgressStep;
         float progressBarStep = _progressBarCounter / _clickCountsToWin;
-        OnUpdateProgressBar?.Invoke(progressBarStep);
+        OnUpdateProgressBar?.Invoke(progressBarStep, _progressBarCounter, _clickCountsToWin);
         
         if (_progressBarCounter >= _clickCountsToWin)
         {
@@ -57,7 +65,6 @@ public class GameBoard : MonoBehaviour
     {
         OnWin?.Invoke();
         clickableItem.gameObject.SetActive(false);
-        
     }
 
     private void TeleportToRandomPlace()
