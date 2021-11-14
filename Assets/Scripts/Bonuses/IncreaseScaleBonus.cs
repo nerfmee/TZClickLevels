@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class FreezeBonus : Bonus
+public class IncreaseScaleBonus : Bonus
 {
     private GameBoard _gameBoard;
     public override void Initialize(GameBoard gameBoard)
@@ -17,9 +13,10 @@ public class FreezeBonus : Bonus
 
     protected override void ActivateBonus()
     {
+        int multiplier = 2;
         _gameBoard.IsExistBonusInLevel = false;
-        
-        _gameBoard.IsFreeze = true;
+        _gameBoard.Clickable.transform.localScale *= multiplier;
+        _gameBoard.ItemSize *= multiplier;
         gameObject.SetActive(false);
     }
 }

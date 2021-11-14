@@ -10,14 +10,14 @@ public class ProgressBar : MonoBehaviour
     public void OnEnable()
     {
         GameBoard.OnStartLevel += Initialize;
-        GameBoard.OnUpdateProgressBar += UpdateProgressBar;
+        GameBoard.OnUpdateProgress += UpdateProgressBar;
         GameBoard.OnCompleteLevel += Deactivate;
     }
 
     public void OnDisable()
     {
         GameBoard.OnStartLevel -= Initialize;
-        GameBoard.OnUpdateProgressBar -= UpdateProgressBar;
+        GameBoard.OnUpdateProgress -= UpdateProgressBar;
         GameBoard.OnCompleteLevel -= Deactivate;
     }
 
