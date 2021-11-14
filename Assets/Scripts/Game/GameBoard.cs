@@ -6,22 +6,24 @@ using Random = UnityEngine.Random;
 public class GameBoard : MonoBehaviour
 {
     [SerializeField] private ClickableItem clickableItem;
-    [SerializeField] private DoubleTap _doubleTap;
-    
+
     private Vector2 _width;
     private Vector2 _height;
     private Vector2 _itemSize;
 
-    private float _clickCountsToWin = 20;
-    private int _bonusSpawnChance = 50;
+    private float _clickCountsToWin = 0;
+    private int _bonusSpawnChance = 0;
 
     public static Action<float> OnStartLevel;
     public static Action<float, float, float> OnUpdateProgressBar;
-    public static Action OnWin;
+    public static Action OnComleteLevel;
     
     
     private float _progressBarCounter = 0;
     public int ProgressStep { get; set; } = 1;
+
+    private Bonus[] _bonusesInLevel = Array.Empty<Bonus>();
+    private Bonus[] spawnedBonuses = Array.Empty<Bonus>();
     private void Awake()
     {
         Camera cameraMain = Camera.main;
@@ -36,10 +38,28 @@ public class GameBoard : MonoBehaviour
         _itemSize = clickableItem.ItemSpriteRenderer.size;
     }
 
-    private void StartLevel()
+    public void StartLevel( LevelSettings levelSettings)
     {
+        _bonusesInLevel = levelSettings.Bonuses;
+        _clickCountsToWin = levelSettings.ClickCountsToWin;
+        _bonusSpawnChance = levelSettings.BonusSpawnChance;
+
+        InitializeLevelBonuses();
         OnStartLevel?.Invoke(_clickCountsToWin);
         clickableItem.gameObject.SetActive(true);
+    }
+
+    private void InitializeLevelBonuses()
+    {
+        foreach (var bonus in _bonusesInLevel)
+        {
+            Bonus tempBonus = Instantiate(bonus);
+            
+            Array.Resize(ref spawnedBonuses, spawnedBonuses.Length+1);
+            spawnedBonuses[spawnedBonuses.Length-1] = tempBonus;
+            
+            tempBonus.Initialize(this);
+        }
     }
 
     public void ProgressApply()
@@ -63,7 +83,7 @@ public class GameBoard : MonoBehaviour
 
     private void CompleteLevel()
     {
-        OnWin?.Invoke();
+        OnComleteLevel?.Invoke();
         clickableItem.gameObject.SetActive(false);
     }
 
@@ -74,8 +94,20 @@ public class GameBoard : MonoBehaviour
 
     private void SpawnBonus()
     {
-        _doubleTap.Initialize(this);
-        _doubleTap.gameObject.SetActive(true);
+        int random = Random.Range(0, 101);
+        
+        if (random <= _bonusSpawnChance)
+        {
+            Bonus randomBonus = SelectRandomBonus();
+            randomBonus.gameObject.SetActive(true);
+        }
+    }
+
+    private Bonus SelectRandomBonus()
+    {
+        int randomElement = Random.Range(0, spawnedBonuses.Length);
+        Bonus bonus = spawnedBonuses[randomElement];
+        return bonus;
     }
 
 

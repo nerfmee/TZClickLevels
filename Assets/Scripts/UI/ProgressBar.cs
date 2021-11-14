@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
@@ -12,14 +11,14 @@ public class ProgressBar : MonoBehaviour
     {
         GameBoard.OnStartLevel += Initialize;
         GameBoard.OnUpdateProgressBar += UpdateProgressBar;
-        GameBoard.OnWin += Deactivate;
+        GameBoard.OnComleteLevel += Deactivate;
     }
 
     public void OnDisable()
     {
         GameBoard.OnStartLevel -= Initialize;
         GameBoard.OnUpdateProgressBar -= UpdateProgressBar;
-        GameBoard.OnWin -= Deactivate;
+        GameBoard.OnComleteLevel -= Deactivate;
     }
 
     private void Initialize(float countsToWin)

@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-
-public class DoubleTap : Bonus
+﻿public class DoubleTap : Bonus
 {
     private GameBoard _gameBoard;
 

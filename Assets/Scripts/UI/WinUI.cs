@@ -9,12 +9,12 @@ public class WinUI : MonoBehaviour
     [SerializeField] private GameObject winWindow;
     private void OnEnable()
     {
-        GameBoard.OnWin += Activate;
+        GameBoard.OnComleteLevel += Activate;
     }
 
     private void OnDisable()
     {
-        GameBoard.OnWin -= Activate;
+        GameBoard.OnComleteLevel -= Activate;
     }
 
     private void Activate()
