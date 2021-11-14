@@ -1,4 +1,4 @@
-﻿public class DoubleTap : Bonus
+﻿public class DoubleTapBonus : Bonus
 {
     private GameBoard _gameBoard;
 
@@ -14,6 +14,8 @@
     
     protected override void ActivateBonus( )
     {
+        _gameBoard.IsExistBonusInLevel = false;
+        
         _gameBoard.ProgressStep += 1;
         gameObject.SetActive(false);
     }

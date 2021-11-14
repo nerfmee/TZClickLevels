@@ -6,6 +6,9 @@ using Random = UnityEngine.Random;
 public class GameBoard : MonoBehaviour
 {
     [SerializeField] private ClickableItem clickableItem;
+    [SerializeField] private Transform bonusesParent;
+    public ClickableItem Clickable => clickableItem;
+    public Vector2 ItemSize { get => _itemSize; set => _itemSize = value; }
 
     private Vector2 _width;
     private Vector2 _height;
@@ -16,7 +19,7 @@ public class GameBoard : MonoBehaviour
 
     public static Action<float> OnStartLevel;
     public static Action<float, float, float> OnUpdateProgressBar;
-    public static Action OnComleteLevel;
+    public static Action OnCompleteLevel;
     
     
     private float _progressBarCounter = 0;
@@ -24,7 +27,17 @@ public class GameBoard : MonoBehaviour
 
     private Bonus[] _bonusesInLevel = Array.Empty<Bonus>();
     private Bonus[] spawnedBonuses = Array.Empty<Bonus>();
-    private void Awake()
+
+     private bool isFreeze = false;
+     public bool IsFreeze { set => isFreeze = value; }
+     private bool isExistBonusInLevel = false;
+     public bool IsExistBonusInLevel
+     {
+         get => isExistBonusInLevel;
+         set => isExistBonusInLevel = value;
+     }
+
+     private void Awake()
     {
         Camera cameraMain = Camera.main;
 
@@ -48,17 +61,18 @@ public class GameBoard : MonoBehaviour
         OnStartLevel?.Invoke(_clickCountsToWin);
         clickableItem.gameObject.SetActive(true);
     }
-
+    
     private void InitializeLevelBonuses()
     {
         foreach (var bonus in _bonusesInLevel)
         {
-            Bonus tempBonus = Instantiate(bonus);
+            Bonus tempBonus = Instantiate(bonus, bonusesParent);
             
             Array.Resize(ref spawnedBonuses, spawnedBonuses.Length+1);
             spawnedBonuses[spawnedBonuses.Length-1] = tempBonus;
             
             tempBonus.Initialize(this);
+            tempBonus.gameObject.SetActive(false);
         }
     }
 
@@ -83,23 +97,32 @@ public class GameBoard : MonoBehaviour
 
     private void CompleteLevel()
     {
-        OnComleteLevel?.Invoke();
-        clickableItem.gameObject.SetActive(false);
+        OnCompleteLevel?.Invoke();
+        ResetSpawnValues();
     }
+
+
 
     private void TeleportToRandomPlace()
     {
-        clickableItem.transform.position = CalculateRandomPosition();
+        if (isFreeze == false)
+        {
+            clickableItem.transform.position = CalculateRandomPosition();
+        }
     }
 
     private void SpawnBonus()
     {
-        int random = Random.Range(0, 101);
-        
-        if (random <= _bonusSpawnChance)
+        if (isExistBonusInLevel == false)
         {
-            Bonus randomBonus = SelectRandomBonus();
-            randomBonus.gameObject.SetActive(true);
+            int random = Random.Range(0, 101);
+        
+            if (random <= _bonusSpawnChance)
+            {
+                isExistBonusInLevel = true;
+                Bonus randomBonus = SelectRandomBonus();
+                randomBonus.gameObject.SetActive(true);
+            }   
         }
     }
 
@@ -123,4 +146,22 @@ public class GameBoard : MonoBehaviour
         
         return randomPosition;
     }
+
+    private void ResetSpawnValues()
+    {
+        clickableItem.gameObject.transform.localScale = Vector3.one;
+        _itemSize = clickableItem.ItemSpriteRenderer.size;
+        isFreeze = false;
+        isExistBonusInLevel = false;
+        _progressBarCounter = 0;
+        ProgressStep = 1;
+        
+        clickableItem.gameObject.SetActive(false);
+        foreach (var spawnedBonus in spawnedBonuses)
+        { 
+            spawnedBonus.gameObject.SetActive(false);
+        }
+        spawnedBonuses = Array.Empty<Bonus>();
+    }
+    
 }

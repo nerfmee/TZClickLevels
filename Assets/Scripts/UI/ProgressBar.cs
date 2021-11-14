@@ -11,14 +11,14 @@ public class ProgressBar : MonoBehaviour
     {
         GameBoard.OnStartLevel += Initialize;
         GameBoard.OnUpdateProgressBar += UpdateProgressBar;
-        GameBoard.OnComleteLevel += Deactivate;
+        GameBoard.OnCompleteLevel += Deactivate;
     }
 
     public void OnDisable()
     {
         GameBoard.OnStartLevel -= Initialize;
         GameBoard.OnUpdateProgressBar -= UpdateProgressBar;
-        GameBoard.OnComleteLevel -= Deactivate;
+        GameBoard.OnCompleteLevel -= Deactivate;
     }
 
     private void Initialize(float countsToWin)

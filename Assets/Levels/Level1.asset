@@ -17,3 +17,4 @@ MonoBehaviour:
   bonusSpawnChance: 100
   bonuses:
   - {fileID: 1448291132705040750, guid: 91ec760bd478c0740953a59f193b5b4e, type: 3}
+  - {fileID: -5999823171500896109, guid: b9c022a91137f594a9419d2ef953468c, type: 3}

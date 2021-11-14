@@ -5,20 +5,24 @@ using UnityEngine;
 
 public class WinUI : MonoBehaviour
 {
-
     [SerializeField] private GameObject winWindow;
     private void OnEnable()
     {
-        GameBoard.OnComleteLevel += Activate;
+        GameBoard.OnCompleteLevel += Activate;
     }
 
     private void OnDisable()
     {
-        GameBoard.OnComleteLevel -= Activate;
+        GameBoard.OnCompleteLevel -= Activate;
     }
 
     private void Activate()
     {
         winWindow.SetActive(true);
+    }
+
+    public void Deactivate()
+    {
+        winWindow.SetActive(false);
     }
 }
