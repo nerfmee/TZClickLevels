@@ -1052,6 +1052,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CloseButton
       objectReference: {fileID: 0}
+    - target: {fileID: 4683878956348966927, guid: df413d622609c764c94ffec94796d3bd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df413d622609c764c94ffec94796d3bd, type: 3}
 --- !u!224 &402210764 stripped
@@ -3546,8 +3551,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelsHandler: {fileID: 1126290194}
-  levelInfoWindow: {fileID: 1419105185}
-  levelsContainer: {fileID: 1115168642}
 --- !u!1 &2084291781
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,12 +12,12 @@ public class WinUI : MonoBehaviour
     {
         GameBoard.OnCompleteLevel -= Activate;
     }
-
+    
     private void Activate()
     {
         winWindow.SetActive(true);
     }
-
+    
     public void Deactivate()
     {
         winWindow.SetActive(false);

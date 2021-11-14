@@ -48,7 +48,6 @@ public class GameBoard : MonoBehaviour
         _itemSize = clickableItem.ItemSpriteRenderer.size;
     }
     
-
     #region Progress
     public void ProgressApply()
     {
@@ -151,7 +150,7 @@ public class GameBoard : MonoBehaviour
     }
 
     #endregion
-
+    
     private void ResetSpawnValues()
     {
         clickableItem.gameObject.transform.localScale = Vector3.one;
