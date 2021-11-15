@@ -4,7 +4,7 @@ using UnityEngine;
 public class LevelInfoState : MenuState
 {
     [SerializeField] private LevelsHandler levelsHandler;
-    [SerializeField] private ScoreUi scoreUi;
+    [SerializeField] private ScoreUI scoreUi;
     public override void InitState(MenuController menu)
     {
         base.InitState(menu);

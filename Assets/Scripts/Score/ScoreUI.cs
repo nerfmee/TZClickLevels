@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class ScoreUi : MonoBehaviour
+public class ScoreUI : MonoBehaviour
 {
-    [SerializeField] private LevelsHandler levelsHandler;
     [SerializeField] private RowUI rowUi;
     [SerializeField] private Transform levelScoresParent;
     [SerializeField] private ScoreManager scoreManager;
