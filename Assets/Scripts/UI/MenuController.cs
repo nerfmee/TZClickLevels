@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -84,4 +85,12 @@ public class MenuController : MonoBehaviour
             stateHistory.Push(newType);
         }
     }
+
+
+    public void ActivateSettings()
+    {
+        SetActiveState(MenuType.Settings);
+    }
+    
+    
 }
