@@ -4,9 +4,11 @@ using Random = UnityEngine.Random;
 
 public class GameBoard : MonoBehaviour
 {
+    public static Action<GameBoard> OnStartTimer;
     public static Action<float> OnStartLevel;
     public static Action<float, float, float> OnUpdateProgress;
     public static Action OnCompleteLevel;
+    public static Action<Level, Score> OnSaveScoreResult;
     
     [SerializeField] private ClickableItem clickableItem;
     [SerializeField] private Transform bonusesParent;
@@ -33,6 +35,11 @@ public class GameBoard : MonoBehaviour
     private bool isExistBonusInLevel = false;
 
     public bool IsExistBonusInLevel { set => isExistBonusInLevel = value; }
+
+    private int points;
+    public int Points { set => points = value; }
+
+    private Level currentLevel;
 
     private void Awake()
     {
@@ -64,13 +71,12 @@ public class GameBoard : MonoBehaviour
 
         if (_progressBarCounter >= _clickCountsToWin)
         {
-            CompleteLevel();
+            CompleteLevel(currentLevel);
         }
     }
     #endregion
 
     #region Bonuses
-    
     private void InitializeLevelBonuses()
     {
         foreach (var bonus in _bonusesInLevel)
@@ -133,19 +139,23 @@ public class GameBoard : MonoBehaviour
     #endregion
 
     #region Level
-    public void StartLevel(LevelSettings levelSettings)
+    public void StartLevel(Level level)
     {
+        currentLevel = level;
+        LevelSettings levelSettings = level.LevelSettings;
         _bonusesInLevel = levelSettings.Bonuses;
         _clickCountsToWin = levelSettings.ClickCountsToWin;
         _bonusSpawnChance = levelSettings.BonusSpawnChance;
 
         InitializeLevelBonuses();
         OnStartLevel?.Invoke(_clickCountsToWin);
+        OnStartTimer?.Invoke(this);
         clickableItem.gameObject.SetActive(true);
     }
-    private void CompleteLevel()
+    private void CompleteLevel(Level level)
     {
         OnCompleteLevel?.Invoke();
+        OnSaveScoreResult?.Invoke(level, new Score("Player", points));
         ResetSpawnValues();
     }
 

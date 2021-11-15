@@ -1,14 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelsHandler : MonoBehaviour
 {
    [SerializeField] private GameBoard gameBoard;
+   [SerializeField] private ScoreManager scoreManager;
+   
+   public ScoreManager ScoreManager => scoreManager;
    public Level CurrentLevel { get; set; }
 
    [SerializeField] private Level[] levels;
+   public Level[] Levels => levels;
   
 
    private void Start()
@@ -22,6 +23,12 @@ public class LevelsHandler : MonoBehaviour
       {
          level.GameBoard = gameBoard;
          level.InitializeLevelPanel();
+         InitializeLevelScoreData(level);
       }
+   }
+
+   private void InitializeLevelScoreData(Level level)
+   {
+      scoreManager.LoadScoreData(level);
    }
 }
